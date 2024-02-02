@@ -1,0 +1,545 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Documentação da API",
+    "version": "1.0.0"
+  },
+  
+  "paths": {
+    "/auth/login": {
+        "post": {
+          "tags": ["Auth"],
+          "summary": "Autenticação de Usuário",
+          "description": "Autentica um usuário existente",
+          "consumes": ["application/json"],
+          "produces": ["application/json"],
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Dados de autenticação do usuário",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cpf": {
+                    "type": "string",
+                    "description": "O CPF do usuário",
+                    "example": "123.456.789-10"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "A senha do usuário",
+                    "example": "password123"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Usuário autenticado com sucesso"
+            },
+            "400": {
+              "description": "Usuário não encontrado"
+            },
+            "401": {
+              "description": "Senha incorreta"
+            },
+            "500": {
+              "description": "Erro ao autenticar usuário"
+            }
+          }
+        }
+    },
+    "/vehicles/register": {
+          "post": {
+            "tags": ["Veiculos"],
+            "summary": "Registro de Veículo",
+            "description": "Registra um novo veículo",
+            "consumes": ["application/json"],
+            "produces": ["application/json"],
+            "parameters": [
+                {
+                  "name": "Authorization",
+                  "in": "header",
+                  "description": "Token de autenticação JWT",
+                  "required": true,
+                  "type": "string",
+                  "example": "Bearer <seu_token_jwt>"
+                },
+              {
+                "name": "body",
+                "in": "body",
+                "description": "Dados do veículo a serem registrados",
+                "required": true,
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "alias": {
+                      "type": "string",
+                      "description": "Apelido/Modelo do veículo",
+                      "example": "Carro"
+                    },
+                    "plate": {
+                      "type": "string",
+                      "description": "Placa do veículo",
+                      "example": "ABC1234"
+                    },
+                    "company_cnpj": {
+                      "type": "string",
+                      "description": "CNPJ da empresa vinculada ao veículo (opcional)"
+                    },
+                    "user_cpf": {
+                      "type": "string",
+                      "description": "CPF do usuário vinculado ao veículo (opcional)"
+                    }
+                  }
+                }
+              }
+            ],
+            "responses": {
+              "201": {
+                "description": "Veículo cadastrado com sucesso"
+              },
+              "400": {
+                "description": "Enviar todos os dados obrigatórios / Você deve enviar apenas um usuário ou empresa, enviado empresa e funcionário / O veículo com a placa informada já existe"
+              },
+              "500": {
+                "description": "Erro ao cadastrar veículo"
+              }
+            }
+          }
+    },
+    "/vehicles/update/{plate}": {
+          "put": {
+            "tags": ["Veiculos"],
+            "summary": "Atualização de Veículo",
+            "description": "Atualiza um veículo existente",
+            "consumes": ["application/json"],
+            "produces": ["application/json"],
+            "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "description": "Token de autenticação JWT",
+                "required": true,
+                "type": "string",
+                "example": "Bearer <seu_token_jwt>"
+              },
+              {
+                "name": "plate",
+                "in": "path",
+                "description": "Placa do veículo a ser atualizado",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "in": "body",
+                "description": "Dados do veículo a serem atualizados",
+                "required": true,
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "alias": {
+                      "type": "string",
+                      "description": "Novo apelido/Modelo do veículo"
+                    },
+                    "company_cnpj": {
+                      "type": "string",
+                      "description": "Novo CNPJ da empresa vinculada ao veículo (opcional)"
+                    },
+                    "user_cpf": {
+                      "type": "string",
+                      "description": "Novo CPF do usuário vinculado ao veículo (opcional)"
+                    }
+                  }
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Veículo atualizado com sucesso"
+              },
+              "400": {
+                "description": "Veículo não encontrado / O veículo já está vinculado a outro usuário / O veículo já está vinculado a outra empresa / A empresa com cnpj informado não existe, não é possível vincular o veículo ao mesmo / O usuário com cpf informado não existe, não é possível vincular o veículo ao mesmo / Já existe outro veículo com a placa informada"
+              },
+              "500": {
+                "description": "Erro ao atualizar veículo"
+              }
+            }
+          }
+    },
+    "/vehicles/delete/{plate}": {
+          "delete": {
+            "tags": ["Veiculos"],
+            "summary": "Exclusão de Veículo",
+            "description": "Exclui um veículo existente",
+            "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "description": "Token de autenticação JWT",
+                "required": true,
+                "type": "string",
+                "example": "Bearer <seu_token_jwt>"
+              },
+              {
+                "name": "plate",
+                "in": "path",
+                "description": "Placa do veículo a ser excluído",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Veículo deletado com sucesso"
+              },
+              "404": {
+                "description": "Veículo não encontrado"
+              },
+              "500": {
+                "description": "Erro ao deletar veículo"
+              }
+            }
+          }
+    },
+    "/users/register": {
+          "post": {
+            "tags": ["Usuarios"],
+            "summary": "Registro de Usuário",
+            "description": "Registra um novo usuário",
+            "consumes": ["application/json"],
+            "produces": ["application/json"],
+            "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Dados do usuário a ser registrado",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do usuário",
+                    "example": "Gustavo"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "Senha",
+                    "example": "senhadificil"
+                  },
+                  "cpf": {
+                    "type": "string",
+                    "description": "CPF",
+                    "example": "999.999.999-99"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Número do telefone",
+                    "example": "999999999"
+                  },
+                  "mail": {
+                    "type": "string",
+                    "description": "E-mail do usuário",
+                    "example": "teste@mail.com"
+                  }
+                }
+              }
+            }
+          ],
+            "responses": {
+              "201": {
+                "description": "Usuário cadastrado com sucesso"
+              },
+              "400": {
+                "description": "Enviar todos os dados obrigatórios ou usuário com CPF já existente"
+              },
+              "500": {
+                "description": "Erro ao cadastrar usuário"
+              }
+            }
+          }
+    },
+    "/users/update/{cpf}": {
+          "put": {
+            "tags": ["Usuarios"],
+            "summary": "Atualização de Usuário",
+            "description": "Atualiza um usuário existente",
+            "consumes": ["application/json"],
+            "produces": ["application/json"],
+            "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "description": "Token de autenticação JWT",
+                "required": true,
+                "type": "string",
+                "example": "Bearer <seu_token_jwt>"
+              },
+              {
+                "name": "cpf",
+                "in": "path",
+                "description": "CPF do usuário a ser atualizado",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "in": "body",
+                "description": "Dados do usuário a serem atualizados",
+                "required": true,
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Novo nome do usuário"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Novo telefone do usuário (opcional)"
+                    },
+                    "mail": {
+                      "type": "string",
+                      "description": "Novo e-mail do usuário (opcional)"
+                    },
+                    "password": {
+                      "type": "string",
+                      "description": "Nova e-senha do usuário (opcional)"
+                    }
+                  }
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Usuário atualizado com sucesso"
+              },
+              "400": {
+                "description": "Usuário não encontrado / Empresa não encontrada / Já existe outro usuário com o CPF informado"
+              },
+              "500": {
+                "description": "Erro ao atualizar usuário"
+              }
+            }
+          }
+    },
+    "/users/delete/{cpf}": {
+          "delete": {
+            "tags": ["Usuarios"],
+            "summary": "Exclusão de Usário",
+            "description": "Exclui um usuário existente",
+            "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "description": "Token de autenticação JWT",
+                "required": true,
+                "type": "string",
+                "example": "Bearer <seu_token_jwt>"
+              },
+              {
+                "name": "cpf",
+                "in": "path",
+                "description": "CPF do usuário a ser excluído",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Usuário deletado com sucesso"
+              },
+              "404": {
+                "description": "Usuário não encontrado"
+              },
+              "500": {
+                "description": "Erro ao deletar Usuário"
+              }
+            }
+          }
+    },
+    "/companies/register": {
+          "post": {
+            "tags": ["Empresas"],
+            "summary": "Registro de Empresa",
+            "description": "Registra uma nova empresa",
+            "consumes": ["application/json"],
+            "produces": ["application/json"],
+            "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "description": "Token de autenticação JWT",
+                "required": true,
+                "type": "string",
+                "example": "Bearer <seu_token_jwt>"
+              },
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Dados da empresa a ser registrada",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "trade_name": {
+                    "type": "string",
+                    "description": "Nome da empresa",
+                    "example": "Empresa"
+                  },
+                  "cnpj": {
+                    "type": "string",
+                    "description": "CNPJ",
+                    "example": "99.9999.999/9999-99"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Número do telefone",
+                    "example": "999999999"
+                  },
+                  "mail": {
+                    "type": "string",
+                    "description": "E-mail da empresa",
+                    "example": "teste@mail.com"
+                  },
+                  "user_cpf": {
+                    "type": "string",
+                    "description": "CPF do usuário a ser vinculado (opcional)",
+                    "example": "999.999.999-99"
+                  }
+                }
+              }
+            }
+          ],
+            "responses": {
+              "201": {
+                "description": "Usuário cadastrado com sucesso"
+              },
+              "400": {
+                "description": "Enviar todos os dados obrigatórios ou usuário com CPF já existente"
+              },
+              "500": {
+                "description": "Erro ao cadastrar usuário"
+              }
+            }
+          }
+    },
+    "/companies/update/{cnpj}": {
+          "put": {
+            "tags": ["Empresas"],
+            "summary": "Atualização de Empresa",
+            "description": "Atualiza um empresa existente",
+            "consumes": ["application/json"],
+            "produces": ["application/json"],
+            "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "description": "Token de autenticação JWT",
+                "required": true,
+                "type": "string",
+                "example": "Bearer <seu_token_jwt>"
+              },
+              {
+                "name": "cnpj",
+                "in": "path",
+                "description": "CNPJ da empresa a ser atualizada",
+                "required": true,
+                "type": "string"
+              },
+              {
+                "name": "body",
+                "in": "body",
+                "description": "Dados da empresa a serem atualizados",
+                "required": true,
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "trade_name": {
+                      "type": "string",
+                      "description": "Novo nome da empresa (opcional)"
+                    },
+                    "phone": {
+                      "type": "string",
+                      "description": "Novo telefone da empresa (opcional)"
+                    },
+                    "mail": {
+                      "type": "string",
+                      "description": "Novo e-mail da empresa (opcional)"
+                    },
+                    "cnpj": {
+                      "type": "string",
+                      "description": "Novo cnpj da empresa (opcional)"
+                    },
+                    "user_cpf": {
+                      "type": "string",
+                      "description": "Novo usuário a ser vinculado na empresa (opcional)"
+                    }
+                  }
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Empresa atualizada com sucesso"
+              },
+              "400": {
+                "description": "Empresa não encontrada / Já existe outra empresa com o cnpj informado / O usuário com cpf informado não existe, não é possível vincular a empresa ao mesmo."
+              },
+              "500": {
+                "description": "Erro ao atualizar empresa"
+              }
+            }
+          }
+    },
+    "/companie/delete/{cnpj}": {
+          "delete": {
+            "tags": ["Empresas"],
+            "summary": "Exclusão de Empresa",
+            "description": "Exclui uma empresa existente",
+            "parameters": [
+              {
+                "name": "Authorization",
+                "in": "header",
+                "description": "Token de autenticação JWT",
+                "required": true,
+                "type": "string",
+                "example": "Bearer <seu_token_jwt>"
+              },
+              {
+                "name": "cnpj",
+                "in": "path",
+                "description": "CNPJ da empresa a ser excluída",
+                "required": true,
+                "type": "string"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Empresa deletada com sucesso"
+              },
+              "404": {
+                "description": "Empresa não encontrada"
+              },
+              "500": {
+                "description": "Erro ao deletar Empresa"
+              }
+            }
+          }
+    }
+  },
+  "components": {        
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

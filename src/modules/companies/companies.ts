@@ -49,7 +49,7 @@ companies.post('/register', async (req: Request, res: Response) => {
 
 companies.put('/update/:cnpj', async (req: Request, res: Response) => {
   try {
-    const { trade_name, phone, mail, cnpj } = req.body;
+    const { trade_name, phone, mail, cnpj, user_cpf } = req.body;
     const cnpjParam = req.params.cnpj;
 
     const existingCompany = await db.query('SELECT * FROM companies WHERE cnpj = $1', [cnpjParam]);
@@ -68,8 +68,18 @@ companies.put('/update/:cnpj', async (req: Request, res: Response) => {
 
     if (companiesWithSameCnpj.rows.length > 0) {
       return res.status(400).json({ message: 'Já existe outra empresa com o cnpj informado' });
-    } else {
+    } else if (cnpj) {
       fieldsToUpdate.cnpj = cnpj;
+    }
+
+    if (user_cpf) {
+      const userExists = await db.query('SELECT * FROM users WHERE cpf = $1', [user_cpf]);
+
+      if (userExists.rows.length == 0) {
+        return res.status(400).json({ message: 'O usuário com cpf informado não existe, não é possível vincular a empresa ao mesmo.' });
+      }
+
+      await db.query('UPDATE users SET company_id = $1 WHERE id = $2', [existingCompany.rows[0].id, userExists.rows[0].id]);
     }
 
     // Atualizar os dados da empresa no banco de dados
