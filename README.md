@@ -21,6 +21,8 @@ Este repositório contém uma aplicação que utiliza Node.js, npm e Docker para
 Após seguir esses passos, o ambiente de desenvolvimento estará configurado e a aplicação estará em execução.
 
 ## Acesse a Documentação da API
+![image](https://github.com/rafavramos/vehicles-crud-api/assets/81692502/7bad163f-0394-4053-935c-1938b747fd16)
+
 Para acessar a documentação da API, abra seu navegador e vá para o seguinte endereço:
 
 http://localhost:{PORTA_UTILIZADA}/doc
