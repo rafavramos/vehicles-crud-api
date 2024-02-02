@@ -35,7 +35,7 @@ Para utilizar a API você deve antes registrar um usuário;
 
 Após registrar um usuário fazer login na routa de auth;
 
-Para utilizar as outras rotas da api, sempre será necessário informar no campo Authorization o token retornado do login da seguinte forma: Bearear <aqui_colocar_o_token>;
+Para utilizar as outras rotas da api, sempre será necessário informar no campo Authorization o token retornado do login da seguinte forma: Bearer <aqui_colocar_o_token>;
 
 ## Observações técnicas
 
