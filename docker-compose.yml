@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: api
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: senha
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  app:
+    build: .
+    ports:
+      - "2899:2899"  # Mapeamento da porta da sua aplicação
+    depends_on:
+      - db  # Garante que o serviço do banco de dados esteja pronto antes de iniciar a aplicação
+    environment:
+      PORT: 2899  # Configuração da porta da aplicação
+      DATABASE_URL: postgres://postgres:senha@db:5432/postgres  # URL de conexão com o banco de dados

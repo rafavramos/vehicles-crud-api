@@ -1,0 +1,24 @@
+# Use a imagem Node.js como base
+FROM node:latest
+
+# Defina o diretório de trabalho dentro do contêiner
+WORKDIR /usr/src/app
+
+# Copie os arquivos necessários para o contêiner (package.json, package-lock.json, tsconfig.json)
+COPY package*.json ./
+COPY tsconfig.json ./
+
+# Instale as dependências
+RUN npm install
+
+# Copie o código-fonte para o contêiner
+COPY . .
+
+# Compile o TypeScript para JavaScript
+RUN npm run build
+
+# Exponha a porta em que a aplicação irá rodar
+EXPOSE 2899
+
+# Comando para executar a aplicação compilada
+CMD ["node", "build/index.js"]
