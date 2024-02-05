@@ -45,6 +45,11 @@ Foi utilizado o método DELETE CASCADE em algumas tabelas apenas para fim de est
 
 Foi utilizado Typescript e Express para construção da Api, além de algumas outras libs auxiliares;
 
+TO DO (ultima atualização 02/02/2023):
+1. Criar um container para subida da API;
+2. Organizar a estrutura de pastas;
+3. Criar testes;
+
 
 
 
