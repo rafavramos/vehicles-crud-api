@@ -41,7 +41,7 @@ Para utilizar as outras rotas da api, sempre será necessário informar no campo
 
 Para simplificar a estrutura de tabelas foi criado um arquivo init.sql que é executado ao subir o container do postgres;
 
-No arquivo init.sql, algumas colunas de tabelas foram criadas com DELETE CASCADE, ou seja, ao deletar um dado da tabela deletará de outras que possui seus vínculos, não é recomendado utilizar este método, porém para facilitar a gerencia da API e estudos em express o mesmo foi utilizado;
+Foi utilizado o método DELETE CASCADE em algumas tabelas apenas para fim de estudos, é importante observar a necessidade deste método em APIs para uso comercial uma vez que o uso deste método pode causar resultado indesejado;
 
 Foi utilizado Typescript e Express para construção da Api, além de algumas outras libs auxiliares;
 
